@@ -1,0 +1,540 @@
+{
+  "tables": {
+    "venue_sections": {
+      "fields": [
+        [
+          "price",
+          "decimal",
+          false
+        ],
+        [
+          "seats_count",
+          "int",
+          false
+        ],
+        [
+          "section_id",
+          "uuid",
+          false
+        ],
+        [
+          "type_id",
+          "text",
+          false
+        ],
+        [
+          "venue_id",
+          "uuid",
+          false
+        ]
+      ],
+      "field_names": [
+        "type_id",
+        "price",
+        "section_id",
+        "venue_id",
+        "seats_count"
+      ],
+      "types_by_name": {
+        "seats_count": "int",
+        "section_id": "uuid",
+        "price": "decimal",
+        "type_id": "text",
+        "venue_id": "uuid"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "venue_id"
+      ],
+      "clustering_keys": [
+        "section_id",
+        "type_id"
+      ],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    },
+    "order_queue_scylla_cdc_log": {
+      "fields": [
+        [
+          "cdc$batch_seq_no",
+          "int",
+          false
+        ],
+        [
+          "cdc$deleted_session_id",
+          "boolean",
+          false
+        ],
+        [
+          "cdc$end_of_batch",
+          "boolean",
+          false
+        ],
+        [
+          "cdc$operation",
+          "tinyint",
+          false
+        ],
+        [
+          "cdc$stream_id",
+          "blob",
+          false
+        ],
+        [
+          "cdc$time",
+          "timeuuid",
+          false
+        ],
+        [
+          "cdc$ttl",
+          "bigint",
+          false
+        ],
+        [
+          "event_id",
+          "uuid",
+          false
+        ],
+        [
+          "session_id",
+          "text",
+          false
+        ],
+        [
+          "started_at",
+          "timestamp",
+          false
+        ],
+        [
+          "ticket_id",
+          "uuid",
+          false
+        ]
+      ],
+      "field_names": [
+        "cdc$batch_seq_no",
+        "session_id",
+        "started_at",
+        "cdc$operation",
+        "cdc$time",
+        "event_id",
+        "ticket_id",
+        "cdc$end_of_batch",
+        "cdc$stream_id",
+        "cdc$ttl",
+        "cdc$deleted_session_id"
+      ],
+      "types_by_name": {
+        "cdc$deleted_session_id": "boolean",
+        "cdc$stream_id": "blob",
+        "cdc$ttl": "bigint",
+        "cdc$operation": "tinyint",
+        "event_id": "uuid",
+        "session_id": "text",
+        "started_at": "timestamp",
+        "cdc$end_of_batch": "boolean",
+        "cdc$batch_seq_no": "int",
+        "ticket_id": "uuid",
+        "cdc$time": "timeuuid"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "cdc$stream_id"
+      ],
+      "clustering_keys": [
+        "cdc$batch_seq_no",
+        "cdc$time"
+      ],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    },
+    "order_queue": {
+      "fields": [
+        [
+          "event_id",
+          "uuid",
+          false
+        ],
+        [
+          "session_id",
+          "text",
+          false
+        ],
+        [
+          "started_at",
+          "timestamp",
+          false
+        ],
+        [
+          "ticket_id",
+          "uuid",
+          false
+        ]
+      ],
+      "field_names": [
+        "event_id",
+        "ticket_id",
+        "session_id",
+        "started_at"
+      ],
+      "types_by_name": {
+        "session_id": "text",
+        "event_id": "uuid",
+        "started_at": "timestamp",
+        "ticket_id": "uuid"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "event_id"
+      ],
+      "clustering_keys": [
+        "started_at",
+        "ticket_id"
+      ],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    },
+    "orders": {
+      "fields": [
+        [
+          "event_id",
+          "uuid",
+          false
+        ],
+        [
+          "order_id",
+          "uuid",
+          false
+        ],
+        [
+          "purchased_at",
+          "timestamp",
+          false
+        ],
+        [
+          "status",
+          "text",
+          false
+        ],
+        [
+          "total_price",
+          "decimal",
+          false
+        ],
+        [
+          "user_id",
+          "uuid",
+          false
+        ]
+      ],
+      "field_names": [
+        "purchased_at",
+        "status",
+        "user_id",
+        "order_id",
+        "event_id",
+        "total_price"
+      ],
+      "types_by_name": {
+        "user_id": "uuid",
+        "event_id": "uuid",
+        "order_id": "uuid",
+        "purchased_at": "timestamp",
+        "status": "text",
+        "total_price": "decimal"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "order_id"
+      ],
+      "clustering_keys": [],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    },
+    "events": {
+      "fields": [
+        [
+          "date",
+          "timestamp",
+          false
+        ],
+        [
+          "event_id",
+          "uuid",
+          false
+        ],
+        [
+          "event_type",
+          "text",
+          false
+        ],
+        [
+          "has_tickets",
+          "boolean",
+          false
+        ],
+        [
+          "name",
+          "text",
+          false
+        ],
+        [
+          "slug",
+          "text",
+          false
+        ],
+        [
+          "venue_id",
+          "uuid",
+          false
+        ]
+      ],
+      "field_names": [
+        "event_id",
+        "has_tickets",
+        "date",
+        "name",
+        "slug",
+        "venue_id",
+        "event_type"
+      ],
+      "types_by_name": {
+        "venue_id": "uuid",
+        "date": "timestamp",
+        "event_type": "text",
+        "event_id": "uuid",
+        "name": "text",
+        "slug": "text",
+        "has_tickets": "boolean"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "event_id"
+      ],
+      "clustering_keys": [],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    },
+    "tickets": {
+      "fields": [
+        [
+          "event_id",
+          "uuid",
+          false
+        ],
+        [
+          "price",
+          "decimal",
+          false
+        ],
+        [
+          "section",
+          "uuid",
+          false
+        ],
+        [
+          "status",
+          "text",
+          false
+        ],
+        [
+          "ticket_id",
+          "uuid",
+          false
+        ],
+        [
+          "type_id",
+          "text",
+          false
+        ]
+      ],
+      "field_names": [
+        "section",
+        "event_id",
+        "ticket_id",
+        "status",
+        "type_id",
+        "price"
+      ],
+      "types_by_name": {
+        "price": "decimal",
+        "section": "uuid",
+        "status": "text",
+        "event_id": "uuid",
+        "type_id": "text",
+        "ticket_id": "uuid"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "event_id"
+      ],
+      "clustering_keys": [
+        "ticket_id"
+      ],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    }
+  },
+  "udts": {},
+  "materialized_views": {
+    "available_tickets": {
+      "fields": [
+        [
+          "event_id",
+          "uuid",
+          false
+        ],
+        [
+          "price",
+          "decimal",
+          false
+        ],
+        [
+          "section",
+          "uuid",
+          false
+        ],
+        [
+          "status",
+          "text",
+          false
+        ],
+        [
+          "ticket_id",
+          "uuid",
+          false
+        ],
+        [
+          "type_id",
+          "text",
+          false
+        ]
+      ],
+      "field_names": [
+        "price",
+        "section",
+        "status",
+        "ticket_id",
+        "event_id",
+        "type_id"
+      ],
+      "types_by_name": {
+        "event_id": "uuid",
+        "ticket_id": "uuid",
+        "status": "text",
+        "price": "decimal",
+        "section": "uuid",
+        "type_id": "text"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "event_id",
+        "status"
+      ],
+      "clustering_keys": [
+        "ticket_id"
+      ],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    },
+    "available_events": {
+      "fields": [
+        [
+          "date",
+          "timestamp",
+          false
+        ],
+        [
+          "event_id",
+          "uuid",
+          false
+        ],
+        [
+          "event_type",
+          "text",
+          false
+        ],
+        [
+          "has_tickets",
+          "boolean",
+          false
+        ],
+        [
+          "name",
+          "text",
+          false
+        ],
+        [
+          "slug",
+          "text",
+          false
+        ],
+        [
+          "venue_id",
+          "uuid",
+          false
+        ]
+      ],
+      "field_names": [
+        "has_tickets",
+        "venue_id",
+        "slug",
+        "name",
+        "event_id",
+        "date",
+        "event_type"
+      ],
+      "types_by_name": {
+        "venue_id": "uuid",
+        "name": "text",
+        "event_type": "text",
+        "date": "timestamp",
+        "event_id": "uuid",
+        "has_tickets": "boolean",
+        "slug": "text"
+      },
+      "type_name": "",
+      "table_name": "",
+      "base_table": "",
+      "partition_keys": [
+        "has_tickets"
+      ],
+      "clustering_keys": [
+        "event_id"
+      ],
+      "static_columns": [],
+      "global_secondary_indexes": [],
+      "local_secondary_indexes": [],
+      "table_options": null
+    }
+  },
+  "keyspace_name": "ks"
+}
