@@ -1,7 +1,5 @@
-use std::str::FromStr;
 use charybdis::macros::{charybdis_model, charybdis_view_model};
 use charybdis::types::{Decimal, Text, Uuid};
-
 
 #[charybdis_model(
     table_name = tickets,
@@ -47,3 +45,4 @@ pub struct AvailableTicket {
     pub price: Decimal,
     pub status: Text,
 }
+

@@ -1,7 +1,6 @@
 use charybdis::macros::charybdis_model;
 use charybdis::types::{Decimal, Text, Timestamp, Uuid};
 
-const TTL: &str = "5";
 #[charybdis_model(
     table_name = "orders",
     partition_keys = [order_id],
@@ -35,3 +34,4 @@ pub struct OrderQueue {
     pub session_id: Text,
     pub started_at: Timestamp,
 }
+
