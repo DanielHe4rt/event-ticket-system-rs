@@ -1,19 +1,19 @@
 use std::sync::Arc;
 
+use crate::models::event::{AvailableEvent, Event};
+use crate::models::order::{Order, OrderQueue};
+use crate::models::ticket::{AvailableTicket, Ticket};
+use crate::models::venue::VenueSection;
 use charybdis::operations::Insert;
 use chrono::Utc;
 use log::debug;
 use rand::prelude::SliceRandom;
 use scylla::CachingSession;
 use uuid::Uuid;
-use crate::models::event::{AvailableEvent, Event};
-use crate::models::order::{Order, OrderQueue};
-use crate::models::ticket::{AvailableTicket, Ticket};
-use crate::models::venue::VenueSection;
 
 pub async fn handle_events(session: Arc<CachingSession>) -> anyhow::Result<()> {
     let venue = VenueSection::random();
-    let event = Event::random(venue.venue_id.clone());
+    let event = Event::random(venue.venue_id);
 
     // prepare event
     venue.insert().execute(&session).await?;
@@ -24,16 +24,13 @@ pub async fn handle_events(session: Arc<CachingSession>) -> anyhow::Result<()> {
     debug!("Setting up tickets: {:?}", venue.seats_count);
 
     for _ in 0..venue.seats_count {
-        let ticket = Ticket::from_event(
-            event.event_id,
-            venue.section_id.clone(),
-            venue.price.clone(),
-        );
+        let ticket = Ticket::from_event(event.event_id, venue.section_id, venue.price.clone());
         ticket.insert().execute(&session).await?;
     }
     debug!("Tickets settled!");
 
     // Running the purchases
+    #[allow(unreachable_code)]
     loop {
         let result = AvailableEvent::find_by_has_tickets(true)
             .execute(&session)
@@ -41,21 +38,26 @@ pub async fn handle_events(session: Arc<CachingSession>) -> anyhow::Result<()> {
             .try_collect()
             .await?;
 
-        let random_event = result.choose(&mut rand::thread_rng()).expect("No events available");
+        let random_event = result
+            .choose(&mut rand::thread_rng())
+            .expect("No events available");
 
-        let mut available_tickets = AvailableTicket::find_by_event_id_and_status(random_event.event_id, "available".to_string())
-            .page_size(5)
-            .execute(&session)
-            .await?
-            .try_collect()
-            .await?;
+        let available_tickets = AvailableTicket::find_by_event_id_and_status(
+            random_event.event_id,
+            "available".to_string(),
+        )
+        .page_size(5)
+        .execute(&session)
+        .await?
+        .try_collect()
+        .await?;
 
         let available_ticket = available_tickets.choose(&mut rand::thread_rng()).unwrap();
         let mut ticket = Ticket {
             ticket_id: available_ticket.ticket_id,
-            event_id: available_ticket.event_id.clone(),
+            event_id: available_ticket.event_id,
             type_id: available_ticket.type_id.clone(),
-            section: available_ticket.section.clone(),
+            section: available_ticket.section,
             price: available_ticket.price.clone(),
             status: "processing".to_string(),
         };
@@ -99,9 +101,8 @@ pub async fn handle_events(session: Arc<CachingSession>) -> anyhow::Result<()> {
         }
     }
 
-    // how do i get all queries that i have executed?
+    // NOTE: This code is unreachable, but it's here to show the loop that will run forever
 
-
-
-    Ok(())
+    // TODO: how do i get all queries that i have executed?
 }
+

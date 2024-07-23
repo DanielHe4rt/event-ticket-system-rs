@@ -1,19 +1,17 @@
-use std::ops::Add;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::time::SystemTime;
 use anyhow::Error;
 use async_trait::async_trait;
 use charybdis::operations::{Find, Insert};
-use charybdis::types::Uuid;
 use chrono::{DateTime, Utc};
 use log::debug;
-use scylla::{CachingSession, Session, SessionBuilder};
 use scylla::frame::value::CqlTimeuuid;
+use scylla::{CachingSession, Session};
 use scylla_cdc::consumer::{CDCRow, Consumer, ConsumerFactory};
 use scylla_cdc::log_reader::CDCLogReaderBuilder;
+use std::ops::Add;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::Arc;
+use std::time::SystemTime;
 
-use crate::models::order::OrderQueue;
 use crate::models::ticket::Ticket;
 
 struct OrderQueueConsumer {
@@ -50,7 +48,7 @@ impl Consumer for OrderQueueConsumer {
             return Ok(());
         }
 
-        let mut processing_ticket = processing_ticket.unwrap();
+        let processing_ticket = processing_ticket.unwrap();
         if processing_ticket.status != "processing" {
             delete_cdc_row(&self.session, data).await?;
             return Ok(());
@@ -88,6 +86,7 @@ impl ConsumerFactory for OrderQueueConsumerFactory {
     }
 }
 
+#[allow(unused)] // TODO: remove me when used
 struct CountingConsumer {
     counter: Arc<AtomicUsize>,
 }
@@ -101,8 +100,10 @@ impl Consumer for CountingConsumer {
     }
 }
 
-
-pub async fn start_cdc_worker(regular_session: Arc<Session>, consumer_session: Arc<CachingSession>) -> anyhow::Result<()> {
+pub async fn start_cdc_worker(
+    regular_session: Arc<Session>,
+    consumer_session: Arc<CachingSession>,
+) -> anyhow::Result<()> {
     let factory = Arc::new(OrderQueueConsumerFactory {
         session: consumer_session.clone(),
     });
@@ -112,7 +113,8 @@ pub async fn start_cdc_worker(regular_session: Arc<Session>, consumer_session: A
             SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
                 .unwrap(),
-        ).unwrap();
+        )
+        .unwrap();
         let start = end - chrono::Duration::seconds(30);
 
         let (_, handle) = CDCLogReaderBuilder::new()
@@ -131,5 +133,6 @@ pub async fn start_cdc_worker(regular_session: Arc<Session>, consumer_session: A
         handle.await?;
     }
 
-    Ok(())
+    // NOTE: This code is unreachable, but it's here to show the loop that will run forever
 }
+

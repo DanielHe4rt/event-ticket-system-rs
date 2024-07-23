@@ -18,7 +18,7 @@ pub struct Event {
     pub slug: Text,
     pub date: Timestamp,
     pub venue_id: Uuid,
-    pub has_tickets: Boolean
+    pub has_tickets: Boolean,
 }
 
 #[charybdis_view_model(
@@ -34,24 +34,20 @@ pub struct AvailableEvent {
     pub slug: Text,
     pub date: Timestamp,
     pub venue_id: Uuid,
-    pub has_tickets: Boolean
+    pub has_tickets: Boolean,
 }
 
 impl Event {
     pub fn random(venue_id: Uuid) -> Self {
         let generate_event_name = |event_type: &str| {
             let mut rng = rand::thread_rng();
-            let cool_event_names = vec![
-                "The Beatles",
-                "Queen",
-                "The Rolling Stones",
-            ];
+            let cool_event_names = ["The Beatles", "Queen", "The Rolling Stones"];
             let cool_event_name = cool_event_names.choose(&mut rng).unwrap();
 
             format!("{} event {}", cool_event_name, event_type)
         };
 
-        let event_types = vec!["music", "sports", "theater"];
+        let event_types = ["music", "sports", "theater"];
         let event_type = event_types.choose(&mut rand::thread_rng()).unwrap();
 
         let event_name = generate_event_name(event_type);
@@ -64,7 +60,8 @@ impl Event {
             slug: event_slug,
             date: Utc::now(),
             venue_id,
-            has_tickets: true
+            has_tickets: true,
         }
     }
 }
+
